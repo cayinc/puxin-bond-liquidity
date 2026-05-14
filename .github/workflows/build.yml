@@ -7,6 +7,8 @@ on:
       - 'data.xlsx'
       - 'build_data.py'
       - 'build_page.py'
+      - '.github/workflows/build.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
