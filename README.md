@@ -3,11 +3,9 @@
 ## 使用方法
 
 ### 更新数据（每周）
-1. 将最新的 Excel 文件重命名为 `data.xlsx`，替换本目录下的 `data.xlsx`
-2. 双击 **`一键更新.bat`**
-3. 等待 2-3 分钟，网站自动更新
+将最新的 Excel 文件重命名为 `data.xlsx`，替换本目录下的 `data.xlsx`
 
-### 网站地址
+### 网站地址（需要刷新）
 https://cayinc.github.io/puxin-bond-liquidity/
 
 ### 构建流程
