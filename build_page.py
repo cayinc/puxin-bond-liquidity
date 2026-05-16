@@ -201,7 +201,6 @@ td.sum-cell  { background:#fef9e7; font-weight:600; }
 
 <header>
   <h1>📊 普信债流动性数据平台</h1>
-  <p>数据截至 2026-05-09</p>
 </header>
 
 <nav class="tab-nav">
@@ -452,8 +451,18 @@ function s1Render(p) {
 }
 function initChart1() {
   const d = RAW.sheet1;
+  // 按列名动态查找索引，避免硬编码
+  function idxOf(name) {
+    const i = d.headers.findIndex(h => h && h.includes(name));
+    if (i < 0) console.warn('Sheet1 列未找到:', name);
+    return i;
+  }
+  const iDate = idxOf('日期');         // x轴
+  const iTKN  = idxOf('TKN笔数');      // 柱状图
+  const iGVN  = idxOf('GVN笔数');      // 柱状图
+  const iRatio= idxOf('TKN占比');      // 折线图
   const chart = echarts.init(document.getElementById('chart1'));
-  const xData = d.data.map(row => row[2]);
+  const xData = iDate >= 0 ? d.data.map(row => row[iDate]) : d.data.map((_,i) => i);
   const option = {
     backgroundColor:'#fff',
     tooltip:{
@@ -501,18 +510,18 @@ function initChart1() {
     series:[
       {
         name:'TKN笔数', type:'bar', yAxisIndex:0,
-        data: d.data.map(row => { const v = parseInt(row[4]); return isNaN(v) ? null : v; }),
+        data: iTKN >= 0 ? d.data.map(row => { const v = parseInt(row[iTKN]); return isNaN(v) ? null : v; }) : [],
         itemStyle:{color:'#3b82f6',borderRadius:[4,4,0,0]}, barWidth:'40%'
       },
       {
         name:'GVN笔数', type:'bar', yAxisIndex:0,
-        data: d.data.map(row => { const v = parseInt(row[5]); return isNaN(v) ? null : v; }),
+        data: iGVN >= 0 ? d.data.map(row => { const v = parseInt(row[iGVN]); return isNaN(v) ? null : v; }) : [],
         itemStyle:{color:'#ef4444',borderRadius:[4,4,0,0]}, barWidth:'40%'
       },
       {
         name:'TKN占比', type:'line', yAxisIndex:1,
         smooth:true, symbol:'circle', symbolSize:4,
-        data: d.data.map(row => { const v = parseFloat(row[6]); return isNaN(v) ? null : (+v*100).toFixed(2); }),
+        data: iRatio >= 0 ? d.data.map(row => { const v = parseFloat(row[iRatio]); return isNaN(v) ? null : (+v*100).toFixed(2); }) : [],
         lineStyle:{width:2,color:'#f59e0b'}, itemStyle:{color:'#f59e0b'}
       }
     ]
