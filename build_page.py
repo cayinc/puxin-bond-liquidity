@@ -457,7 +457,12 @@ function initChart1() {
     if (i < 0) console.warn('Sheet1 列未找到:', name);
     return i;
   }
-  const iDate = idxOf('日期');         // x轴
+  function idxExact(name) {
+    const i = d.headers.findIndex(h => h === name);
+    if (i < 0) console.warn('Sheet1 列未找到:', name);
+    return i;
+  }
+  const iDate = idxExact('日期');      // x轴（精确匹配，避免匹配到"统计日期"）
   const iTKN  = idxOf('TKN笔数');      // 柱状图
   const iGVN  = idxOf('GVN笔数');      // 柱状图
   const iRatio= idxOf('TKN占比');      // 折线图
